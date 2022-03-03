@@ -9,50 +9,31 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @param Order $order
+     * @return OrderResource
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Order $order): OrderResource
     {
-//        dd(User::find(3)->orders()->get());
-        return OrderResource::collection(Order::all());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return OrderResource::make($order->getAll());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return Response
+     * @param int $id
+     * @return OrderResource
      */
-    public function show($id)
+    public function show(int $id): OrderResource
     {
-        //
+        return OrderResource::make(Order::query()->find($id));
     }
 
     /**
@@ -60,12 +41,17 @@ class OrderController extends Controller
      *
      * @param Order $order
      * @param User $user
-     * @return AnonymousResourceCollection
+     * @return OrderResource
      */
-    public function edit(Order $order, User $user): AnonymousResourceCollection
+    public function edit(Request $request, Order $order): OrderResource
     {
-        dump($order);
-        return OrderResource::collection(Order::query()->find($order));
+        dd($order);
+        $order->fill($request->all());
+        dd(Order::query()->select('orders.*', 'users.name as courier_name', 'order_status.title as status')
+            ->join('users', 'orders.user_id', '=', 'users.id')
+            ->join('order_status', 'orders.order_status_id', '=', 'order_status.id')
+            ->get());
+        return OrderResource::make(Order::query()->find($order));
     }
 
     /**
@@ -75,6 +61,7 @@ class OrderController extends Controller
      * @param $courierID
      * @return Response
      */
+    //нужно переписать для редактирования всех полей
     public function update($orderID, $courierID): Response
     {
         $order = Order::query()->findOrFail($orderID)->setAttribute('user_id', (int)$courierID);
@@ -86,11 +73,12 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Order $order
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Order $order): Response
     {
-        //
+        $order->delete();
+        return response(['type' => 'success']);
     }
 }

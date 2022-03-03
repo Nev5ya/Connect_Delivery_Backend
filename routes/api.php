@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +27,9 @@ Route::get('/tokens/create', function (Request $request) {
     return ['token' => $token->plainTextToken];
 })->middleware('auth.basic');
 
-Route::get('/orders/all', [AdminOrderController::class, 'index']);
-Route::get('/orders/{orderID}/{courierID}/', [AdminOrderController::class, 'update']);
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::post('/orders/{orderID}/{courierID}/', [AdminOrderController::class, 'update'])->name('orders.update');
+    Route::resource('user', AdminUserController::class)->except(['create', 'store', 'edit', 'update']);
+    Route::resource('orders', AdminOrderController::class)->except(['create', 'store', 'edit', 'update']);
+});

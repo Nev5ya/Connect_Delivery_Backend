@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable()->comment('Наименование заказа');
             $table->string('address')->comment('Адрес доставки');
-            $table->string('order_comment')->comment('Комментарий к доставке');
-            $table->unsignedTinyInteger('order_status')->comment('Статус заказа')->default(0);
+            $table->string('comment')->comment('Комментарий к доставке');
             $table->date('delivery_date')->comment('Дедлайн');
-            $table->unsignedBigInteger('user_id')->comment('Идентификатор назначенного курьера')->default(0);
+            $table->unsignedBigInteger('order_status_id')->default(1)->comment('Статус заказа');
+            $table->unsignedBigInteger('user_id')->comment('Идентификатор назначенного курьера')->nullable();
         });
     }
 
