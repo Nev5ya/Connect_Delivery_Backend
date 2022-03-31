@@ -20,7 +20,7 @@ class AdminSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('123'),
+            'password' => Hash::make('123456789'),
             'role_id' => 2,
             'user_status_id' => 2,
             'remember_token' => Str::random(10),

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\FirebaseController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -17,19 +17,34 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 |
 */
 
-Route::middleware('auth.basic')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'admin', 'middleware' => 'auth:sanctum'], function () {
+    Route::resource('user', AdminUserController::class)->except(['create', 'store', 'edit']);
+    Route::resource('orders', AdminOrderController::class)->except(['create', 'edit']);
 });
 
-Route::get('/tokens/create', function (Request $request) {
-    $token = $request->user()->createToken('admin@admin.com'); //!hardcoded $request->token_name
+Route::middleware('guest')->group(
+    function () {
+        $limiter = config('fortify.limiters.login');
 
-    return ['token' => $token->plainTextToken];
-})->middleware('auth.basic');
+        Route::post('register', [ AuthController::class, 'register' ])->middleware(
+            array_filter([$limiter ? 'throttle:' . $limiter : null])
+        );
+
+        Route::post('login', [ AuthController::class, 'login' ])->middleware(
+            array_filter([$limiter ? 'throttle:' . $limiter : null])
+        );
+    }
+);
 
 
-Route::group(['prefix' => 'admin'], function () {
-    Route::post('/orders/{orderID}/{courierID}/', [AdminOrderController::class, 'update'])->name('orders.update');
-    Route::resource('user', AdminUserController::class)->except(['create', 'store', 'edit', 'update']);
-    Route::resource('orders', AdminOrderController::class)->except(['create', 'store', 'edit', 'update']);
-});
+Route::middleware('auth:sanctum')->group(
+    function () {
+        Route::post('logout', [ AuthController::class, 'logout' ]);
+
+        Route::get('user', [ AuthController::class, 'user' ]);
+    }
+);
+
+//Route::get('firebase', [FirebaseController::class, 'index']);
+//Route::get('firebase/create', [FirebaseController::class, 'create']);
+//Route::get('firebase/delete', [FirebaseController::class, 'delete']);

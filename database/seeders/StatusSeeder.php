@@ -16,9 +16,9 @@ class StatusSeeder extends Seeder
     public function run()
     {
         DB::table('order_status')->insert([
-            [ 'title' => 'processing' ],
-            [ 'title' => 'transit' ],
-            [ 'title' => 'delivered' ]
+            [ 'title' => 'В обработке' ],
+            [ 'title' => 'В пути' ],
+            [ 'title' => 'Доставлено' ]
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,6 +15,9 @@ class OrderSeeder extends Seeder
      */
     public function run()
     {
+        $factory = Factory::create('ru_RU');
+        $address = $factory->city . ', ' . $factory->streetAddress;
+
         DB::table('orders')->insert([
             [
                 'name' => 'Пицца',
@@ -40,6 +44,33 @@ class OrderSeeder extends Seeder
                 'delivery_date' => '2013-12-05',
                 'order_status_id' => 3,
                 'user_id' => 3,
+                'created_at' => date(now())
+            ],
+            [
+                'name' => 'Велосипед',
+                'address' => 'Москва, Октябрьская улица, 37',
+                'comment' => '',
+                'delivery_date' => '2021-07-05',
+                'order_status_id' => 3,
+                'user_id' => 2,
+                'created_at' => date(now())
+            ],
+            [
+                'name' => 'Мороженое',
+                'address' => 'Москва, Октябрьская улица, 37',
+                'comment' => 'Предварительно позвонить.',
+                'delivery_date' => '2020-12-08',
+                'order_status_id' => 2,
+                'user_id' => 2,
+                'created_at' => date(now())
+            ],
+            [
+                'name' => $factory->jobTitle,
+                'address' => $address,
+                'comment' => $factory->realTextBetween(10, 50),
+                'delivery_date' => $factory->dateTimeBetween('-3 months', '+1 year'),
+                'order_status_id' => 2,
+                'user_id' => 2,
                 'created_at' => date(now())
             ]
         ]);

@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminSeeder::class);
         $this->call(UserSeeder::class);
 //        User::factory(3)->create();
-        $this->call(OrderSeeder::class);
-//        Order::factory(5)->create();
+//        $this->call(OrderSeeder::class);
+        Order::factory(20)->create();
     }
 }

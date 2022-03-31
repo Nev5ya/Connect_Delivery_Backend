@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->foreign('user_id')
                 ->references('id')
+                ->nullOnDelete()
                 ->on('users');
             $table->foreign('order_status_id')
                 ->references('id')

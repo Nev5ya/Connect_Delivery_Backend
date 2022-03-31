@@ -17,21 +17,26 @@ class OrderFactory extends Factory
      * @return array<string, mixed>
      */
     #[ArrayShape([
+        'name' => "string",
         'address' => "string",
         'comment' => "string",
         'delivery_date' => "string",
         'created_at' => "string",
-        'user_id' => "int"
+        'user_id' => "int",
+        'order_status_id' => "int"
     ])]
     public function definition(): array
     {
-        $user_id = rand(2, User::all()->count());
+        $address = $this->faker->city . ', ' . $this->faker->streetAddress;
+
         return [
-            'address' => $this->faker->streetAddress(),
-            'comment' => $this->faker->realText(rand(15, 50)),
-            'delivery_date' => $this->faker->dateTime(),
+            'name' => $this->faker->jobTitle,
+            'address' => $address,
+            'comment' => $this->faker->realTextBetween(10, 50),
+            'delivery_date' => $this->faker->dateTimeBetween('-3 months', '+1 year')->format('Y-m-d'),
+            'order_status_id' => $this->faker->numberBetween(1, 3),
+            'user_id' => null,
             'created_at' => date(now()),
-            'user_id' => $user_id
         ];
     }
 }
