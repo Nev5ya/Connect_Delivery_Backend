@@ -8,7 +8,7 @@ class UserService
 {
     public function changeUserState(User $user, array $state): bool
     {
-        if ($this->hasUserHaveOrder($user)) {
+        if ($this->hasUserHaveIncompleteOrders($user)) {
             return $user
                 ->setAttribute('user_status_id', $state['user_status_id'])
                 ->save();
@@ -17,8 +17,8 @@ class UserService
         return false;
     }
 
-    protected function hasUserHaveOrder(User $user): bool
+    protected function hasUserHaveIncompleteOrders(User $user): bool
     {
-       return $user->order()->get()->isEmpty();
+       return $user->order()->get()->where('order_status_id', '<>', 3)->isEmpty();
     }
 }

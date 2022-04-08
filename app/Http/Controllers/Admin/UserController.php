@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\FirebaseService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Kreait\Firebase\Exception\AuthException;
+use Kreait\Firebase\Exception\FirebaseException;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class UserController extends Controller
 {
@@ -50,6 +54,8 @@ class UserController extends Controller
             }
         }
 
+        $user->save();
+
         return response([
                 'message' => 'Success',
                 'updatedUser' => $user->find($user->getAttribute('id'))
@@ -60,10 +66,16 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param User $user
+     * @param FirebaseService $firebaseService
      * @return Response
      */
-    public function destroy(User $user): Response
+    public function destroy(User $user, FirebaseService $firebaseService): Response
     {
+        try {
+            $firebaseService->deleteUser($user);
+        } catch (AuthException|FirebaseException $e) {
+            return response($e, ResponseAlias::HTTP_FORBIDDEN);
+        }
         $user->setAttribute('is_deleted', true);
         $user->save();
         return response(['message' => 'Success']);

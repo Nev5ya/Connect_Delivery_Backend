@@ -7,6 +7,7 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\OrderService;
+use Exception;
 use Faker\Factory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -31,12 +32,14 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param Order $order
      * @return OrderResource
      */
-    public function show(int $id): OrderResource
+    public function show(Order $order): OrderResource
     {
-        return OrderResource::make((new Order())->find($id));
+        return OrderResource::make(
+            (new Order())->find($order->getAttribute('id'))
+        );
     }
 
     public function store(Request $request): Response|Application|ResponseFactory
@@ -85,12 +88,11 @@ class OrderController extends Controller
         }
 
         $order->save();
-//todo if user have orders cant off
 
         return response([
-            'message' => 'Success',
+            'message' => 'Order updated',
             'updatedOrder' => $order->find($order->getAttribute('id'))
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -102,6 +104,9 @@ class OrderController extends Controller
     public function destroy(Order $order): Response
     {
         $order->delete();
-        return response(['message' => 'Success']);
+
+        return response([
+            'message' => 'Order deleted'
+        ], Response::HTTP_OK);
     }
 }
