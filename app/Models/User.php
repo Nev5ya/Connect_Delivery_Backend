@@ -25,7 +25,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'coords'
+        'coords',
+        'user_status_id',
+        'role_id'
     ];
 
     /**
@@ -37,9 +39,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'two_factor_secret',
-        'two_factor_recovery_codes',
-        'user_status_id',
-        'role_id'
+        'two_factor_recovery_codes'
     ];
 
     /**
@@ -61,6 +61,7 @@ class User extends Authenticatable
         )
             ->join('role', 'role.id', '=', 'users.role_id')
             ->join('user_status', 'user_status.id', '=', 'users.user_status_id')
+            ->where('role_id', '=', 1) //get only couriers
             ->get();
     }
 

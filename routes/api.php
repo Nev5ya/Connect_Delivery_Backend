@@ -24,11 +24,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:sanctum'], function () 
 
 Route::middleware('guest')->group(
     function () {
-        $limiter = config('fortify.limiters.login');
-
-        Route::post('register', [ AuthController::class, 'register' ])->middleware(
-            array_filter([$limiter ? 'throttle:' . $limiter : null])
-        );
+        $limiter = config('auth.limiters.login');
 
         Route::post('login', [ AuthController::class, 'login' ])->middleware(
             array_filter([$limiter ? 'throttle:' . $limiter : null])
@@ -39,6 +35,8 @@ Route::middleware('guest')->group(
 
 Route::middleware('auth:sanctum')->group(
     function () {
+        Route::post('register', [ AuthController::class, 'register' ]);
+
         Route::post('logout', [ AuthController::class, 'logout' ]);
 
         Route::get('user', [ AuthController::class, 'user' ]);

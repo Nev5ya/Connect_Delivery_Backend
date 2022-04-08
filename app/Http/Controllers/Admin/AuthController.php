@@ -15,16 +15,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Kreait\Firebase\Exception\AuthException;
+use Kreait\Firebase\Exception\FirebaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    public function register(Request $request): Response|Application|ResponseFactory
+    /**
+     * @throws FirebaseException
+     * @throws AuthException
+     */
+    public function register(Request $request, FirebaseService $firebaseService): Response|Application|ResponseFactory
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string']
+            'password' => ['required', 'string', 'min:6']
         ]);
 
         if ($validator->fails()) {
@@ -32,6 +38,8 @@ class AuthController extends Controller
                 'errors' => $validator->errors()->getMessages()
             ], Response::HTTP_FORBIDDEN);
         }
+
+        $firebaseService->createUser($request->only('email', 'password'));
 
         $user = User::query()->create([
             'name' => $request->input('name'),
@@ -52,12 +60,12 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response([
                 'errors' => 'Invalid credentials'
-            ], Response::HTTP_UNAUTHORIZED);
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $user = Auth::user();
 
-        $token = $user->createToken('auth-token');
+        $token = $user->createToken('auth-token')->plainTextToken;
 
         return response([
             'message' => 'Success',

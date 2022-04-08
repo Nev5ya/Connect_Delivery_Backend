@@ -25,6 +25,8 @@ class Authenticate extends Middleware
     {
         if ($jwt = $request->only('auth-token')) {
             $request->headers->set('Authorization', 'Bearer ' . $jwt['auth-token']);
+
+            $request->request->replace((array)$request->request->get('data'));
         }
 
         $this->authenticate($request, $guards);
