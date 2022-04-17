@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Faker\Factory;
 
@@ -21,9 +22,9 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'name' => $faker->name(),
-                'email' => $faker->unique()->safeEmail(),
+                'email' => 'signatov@example.com',
                 'email_verified_at' => now(),
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'password' => Hash::make('123456789'),
                 'role_id' => 1,
                 'user_status_id' => 2,
                 'coords' => '55.684758,37.338521',
@@ -34,7 +35,7 @@ class UserSeeder extends Seeder
                 'name' => $faker->name(),
                 'email' => $faker->unique()->safeEmail(),
                 'email_verified_at' => now(),
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'password' => Hash::make('123456789'),
                 'role_id' => 1,
                 'user_status_id' => 3,
                 'coords' => '55.8,37.7',
@@ -45,7 +46,7 @@ class UserSeeder extends Seeder
                 'name' => $faker->name(),
                 'email' => $faker->unique()->safeEmail(),
                 'email_verified_at' => now(),
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'password' => Hash::make('123456789'),
                 'role_id' => 1,
                 'user_status_id' => 1,
                 'coords' => '55.9,37.9',
@@ -56,7 +57,7 @@ class UserSeeder extends Seeder
                 'name' => $faker->name(),
                 'email' => $faker->unique()->safeEmail(),
                 'email_verified_at' => now(),
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'password' => Hash::make('123456789'),
                 'role_id' => 1,
                 'user_status_id' => 2,
                 'coords' => '55.4,37.9',

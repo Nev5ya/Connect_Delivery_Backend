@@ -18,7 +18,7 @@ class UserStatusSeeder extends Seeder
         DB::table('user_status')->insert([
             [ 'title' => 'Offline' ],
             [ 'title' => 'Online' ],
-            [ 'title' => 'Work' ]
+            [ 'title' => 'Busy' ]
         ]);
     }
 }

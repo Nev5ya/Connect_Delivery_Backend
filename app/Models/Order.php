@@ -18,7 +18,7 @@ class Order extends Model
         'comment',
         'delivery_date',
         'user_id',
-        'order_status_id'
+        'order_status_id'//todo should be hidden
     ];
 
     /**

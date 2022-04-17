@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FirebaseController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
@@ -18,7 +19,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 */
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:sanctum'], function () {
-    Route::resource('user', AdminUserController::class)->except(['create', 'store', 'edit']);
+    Route::resource('users', AdminUserController::class)->except(['create', 'store', 'edit']);
     Route::resource('orders', AdminOrderController::class)->except(['create', 'edit']);
 });
 
@@ -29,6 +30,7 @@ Route::middleware('guest')->group(
         Route::post('login', [ AuthController::class, 'login' ])->middleware(
             array_filter([$limiter ? 'throttle:' . $limiter : null])
         );
+
     }
 );
 
@@ -40,6 +42,10 @@ Route::middleware('auth:sanctum')->group(
         Route::post('logout', [ AuthController::class, 'logout' ]);
 
         Route::get('user', [ AuthController::class, 'user' ]);
+
+        Route::post('uploadPhoto', [ UserController::class, 'uploadPhoto' ]);
+
+        Route::post('removePhoto', [ UserController::class, 'destroyPhoto' ]);
     }
 );
 

@@ -26,8 +26,9 @@ class User extends Authenticatable
         'email',
         'password',
         'coords',
-        'user_status_id',
-        'role_id'
+        'user_status_id',//todo should be hidden
+        'role_id',//todo should be hidden
+        'phone'
     ];
 
     /**
