@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class UserControllerPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
 
@@ -16,10 +16,10 @@ class UserControllerPolicy
      * @param User $current
      * @return bool
      */
-//    public function before(User $current): bool
-//    {
-//        return $current->isAdministrator();
-//    }
+    public function before(User $current): bool
+    {
+        return $current->isAdministrator();
+    }
     /**
      * Determine whether the user can view any models.
      *
@@ -28,7 +28,7 @@ class UserControllerPolicy
      */
     public function viewAny(User $user)
     {
-        dd($user);
+        //
     }
 
     /**
@@ -40,7 +40,7 @@ class UserControllerPolicy
      */
     public function view(User $user, User $model)
     {
-        return true;
+        //
     }
 
     /**
@@ -61,9 +61,9 @@ class UserControllerPolicy
      * @param User $current
      * @return Response|bool
      */
-    public function update(User $target, User $current): Response|bool
+    public function update(User $current, User $target): Response|bool
     {
-        dd($current);
+//        return $target->getAuthIdentifier() === $current->getAuthIdentifier();
     }
 
     /**

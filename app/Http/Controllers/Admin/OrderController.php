@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\OrderService;
 use Exception;
 use Faker\Factory;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -17,6 +18,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
+//    public function __construct()
+//    {
+//        $this->authorizeResource(Order::class, 'order');
+//    }
+
     /**
      * Display a listing of the resource.
      *

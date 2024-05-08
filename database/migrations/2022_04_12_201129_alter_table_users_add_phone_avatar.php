@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('phone')->nullable(true);
@@ -24,9 +24,9 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('is_deleted');
+        Schema::dropIfExists('phone');
         Schema::dropIfExists('photo');
     }
 };

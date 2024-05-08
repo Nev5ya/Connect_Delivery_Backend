@@ -24,11 +24,11 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+//        'password',
         'coords',
-        'user_status_id',//todo should be hidden
-        'role_id',//todo should be hidden
-        'phone'
+        'phone',
+        'city',
+        'date_of_birth'
     ];
 
     /**
@@ -51,6 +51,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function isAdministrator(): bool
+    {
+        return $this->role_id === 2;
+    }
 
     public function getAll(): Collection
     {

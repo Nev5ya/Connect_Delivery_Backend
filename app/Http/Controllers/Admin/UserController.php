@@ -17,6 +17,11 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class UserController extends Controller
 {
+//    public function __construct()
+//    {
+//        $this->authorizeResource(User::class, 'user');
+//    }
+
     /**
      * @param User $user
      * @return UserResource
@@ -54,11 +59,12 @@ class UserController extends Controller
             ->fill($request->all())
             ->syncChanges();
 
-
         if ( $state = $request->only('user_status_id') ) {
             if ( !$userService->changeUserState($user, $state) ) {
                 return response([
-                    'errors' => ['user_status_id' => 'The user has active orders']
+                    'errors' => [
+                        'user_status_id' => 'The user has active orders'
+                    ]
                 ], ResponseAlias::HTTP_CONFLICT);
             }
         }
@@ -118,7 +124,7 @@ class UserController extends Controller
 
     public function destroyPhoto(User $user, UserService $userService): Response|Application|ResponseFactory
     {
-        $userService->setUserPhotoToDefault($user);
+        $userService->setDefaultUserPhoto($user);
         return response([
             'message' => 'The photo was restored to default'
         ]);

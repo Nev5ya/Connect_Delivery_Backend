@@ -2,83 +2,73 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use JetBrains\PhpStorm\ArrayShape;
 
 class ProfileController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return User
      */
-    public function show($id)
+    public function index(User $user): User
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $user->find(auth()->user()->getAuthIdentifier());
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request): Response
     {
-        //
+        $user = auth()->user();
+
+        $user
+            ->fill($request->all())
+            ->syncChanges()
+            ->save();
+
+        return response([
+            'message' => 'User updated',
+            'updatedUser' => $user->find($user->getAttribute('id'))
+        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
         //
+    }
+
+    #[ArrayShape([
+        'password' => "string",
+        'password_confirmation' => "string"
+    ])]
+    public function passwordRules(): array
+    {
+        return [
+            'password' => 'required|confirmed|string|min:6',
+            'password_confirmation' => 'required|string|min:6'
+        ];
+    }
+
+    #[ArrayShape(['email' => "string"])]
+    public function profileRules(User $user): array
+    {
+        return [
+            'email' => 'required|unique:users,email,' . $user->id,
+        ];
     }
 }

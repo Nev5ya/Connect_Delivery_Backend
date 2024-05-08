@@ -6,7 +6,7 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class OrderControllerPolicy
+class OrderPolicy
 {
     use HandlesAuthorization;
 
@@ -16,10 +16,10 @@ class OrderControllerPolicy
      * @param User $current
      * @return bool
      */
-//    public function before(User $current): bool
-//    {
-//        return $current->isAdministrator();
-//    }
+    public function before(User $current): bool
+    {
+        return $current->isAdministrator();
+    }
 
     /**
      * Determine whether the user can view any models.
@@ -29,7 +29,7 @@ class OrderControllerPolicy
      */
     public function viewAny(User $user)
     {
-        dd('all');
+        //
     }
 
     /**
@@ -41,8 +41,7 @@ class OrderControllerPolicy
      */
     public function view(User $user, Order $order)
     {
-        dd('concrete');
-        dd($order);
+        //
     }
 
     /**

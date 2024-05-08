@@ -62,11 +62,19 @@ class UserService
             ->save();
     }
 
-    public function setUserPhotoToDefault(User $user)
+    public function setDefaultUserPhoto(User $user)
     {
         $user = $user->find(auth()->user()->getAuthIdentifier());
         return $user
             ->setAttribute('photo', $this->defaultProfilePhotoPath)
             ->save();
+    }
+
+    public function checkPermissions(User $target): bool
+    {
+        $current = auth()->user();
+
+        return $current->isAdministrator()
+            || $target->getAuthIdentifier() === $current->getAuthIdentifier();
     }
 }
