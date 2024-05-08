@@ -10,6 +10,8 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -36,7 +38,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response([
                 'errors' => $validator->errors()->getMessages()
-            ], Response::HTTP_FORBIDDEN);
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $firebaseService->createUser($request->only('email', 'password'));
@@ -60,7 +62,7 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response([
                 'errors' => 'Invalid credentials'
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            ], Response::HTTP_FORBIDDEN);
         }
 
         $user = Auth::user();

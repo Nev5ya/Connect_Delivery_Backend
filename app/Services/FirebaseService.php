@@ -56,8 +56,8 @@ class FirebaseService
      * @throws FirebaseException
      * @throws AuthException
      */
-    public function getUserByEmail($user): UserRecord
+    public function getUserByEmail(string $email): UserRecord
     {
-        return $this->getAuth()->getUserByEmail($user->getEmailForVerification());
+        return $this->getAuth()->getUserByEmail($email);
     }
 }

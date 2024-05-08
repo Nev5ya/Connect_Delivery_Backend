@@ -17,8 +17,6 @@ class Order extends Model
         'address',
         'comment',
         'delivery_date',
-        'user_id',
-        'order_status_id'
     ];
 
     /**

@@ -9,15 +9,20 @@ use App\Models\User;
 use App\Services\OrderService;
 use Exception;
 use Faker\Factory;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
+//    public function __construct()
+//    {
+//        $this->authorizeResource(Order::class, 'order');
+//    }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,7 +43,7 @@ class OrderController extends Controller
     public function show(Order $order): OrderResource
     {
         return OrderResource::make(
-            (new Order())->find($order->getAttribute('id'))
+            $order->find($order->getAttribute('id'))
         );
     }
 
@@ -48,24 +53,25 @@ class OrderController extends Controller
             'name' => 'required|string|max:255',
             'address' =>'required|string|max:255',
             'comment' => 'string|max:255',
-            'delivery_date' => 'date|date_format:Y-m-d'
+            'delivery_date' => 'required|date|date_format:Y-m-d'
         ],[], [
-            'delivery_date' => 'дата доставки',
+            'delivery_date' => 'Дата доставки',
             'name' => 'Наименование заказа'
         ]);
 
         if ($validator->fails()) {
             return response([
                 'errors' => $validator->errors()->getMessages()
-            ], Response::HTTP_FORBIDDEN);
+            ], Response::HTTP_BAD_REQUEST);
         }
 
-        Order::query()->insert(array_merge($request->all(), [
+        $order = Order::query()->create(array_merge($request->all(), [
             'created_at' => date(now())
         ]));
 
         return response([
-            'message' => 'Success'
+            'message' => 'Order created',
+            'newOrder' => $order->find($order->getAttribute('id'))
         ], Response::HTTP_CREATED);
     }
 
