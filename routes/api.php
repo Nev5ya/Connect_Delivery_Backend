@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\FirebaseController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
@@ -58,7 +57,3 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
 });
-
-//Route::get('firebase', [FirebaseController::class, 'index']);
-//Route::get('firebase/create', [FirebaseController::class, 'create']);
-//Route::get('firebase/delete', [FirebaseController::class, 'delete']);

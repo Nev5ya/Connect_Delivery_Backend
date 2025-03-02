@@ -7,6 +7,11 @@ use App\Models\User;
 
 class OrderService
 {
+    /**
+     * @param Order $order
+     * @param array $state
+     * @return Order
+     */
     public function changeOrderAndUserState(Order $order, array $state): Order
     {
         $user = User::query()->find($state['user_id'] ?? $order->getAttribute('user_id'));

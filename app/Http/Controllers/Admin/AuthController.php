@@ -57,6 +57,10 @@ class AuthController extends Controller
         ], Response::HTTP_CREATED);
     }
 
+    /**
+     * @param Request $request
+     * @return Response|Application|ResponseFactory
+     */
     public function login(Request $request): Response|Application|ResponseFactory
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
@@ -76,11 +80,18 @@ class AuthController extends Controller
         ]);
 }
 
+    /**
+     * @param User $user
+     * @return Model|Collection|Builder|array|null
+     */
     public function user(User $user): Model|Collection|Builder|array|null
     {
         return $user->find(Auth::user()->getAuthIdentifier());
     }
 
+    /**
+     * @return Response|Application|ResponseFactory
+     */
     public function logout(): Response|Application|ResponseFactory
     {
         $user = auth()->user();

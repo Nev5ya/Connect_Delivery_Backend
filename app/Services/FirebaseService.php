@@ -22,11 +22,17 @@ class FirebaseService
             ->withDatabaseUri(env("FIREBASE_DATABASE_URL"));
     }
 
+    /**
+     * @return Database
+     */
     public function getDb(): Database
     {
         return $this->firebase->createDatabase();
     }
 
+    /**
+     * @return Auth
+     */
     public function getAuth(): Auth
     {
         return $this->firebase->createAuth();
@@ -36,17 +42,16 @@ class FirebaseService
      * @throws FirebaseException
      * @throws AuthException
      */
-    public function createUser(array $data)
+    public function createUser(array $data): void
     {
         $this->getAuth()->createUserWithEmailAndPassword($data['email'], $data['password']);
-//        $this->getAuth()->sendEmailVerificationLink($data['email']);
     }
 
     /**
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function deleteUser(User $user)
+    public function deleteUser(User $user): void
     {
         $firebaseUser = $this->getAuth()->getUserByEmail($user->getEmailForVerification());
         $this->getAuth()->deleteUser($firebaseUser->uid);

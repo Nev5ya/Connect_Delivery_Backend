@@ -18,11 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
-//    public function __construct()
-//    {
-//        $this->authorizeResource(Order::class, 'order');
-//    }
-
     /**
      * Display a listing of the resource.
      *
@@ -47,6 +42,10 @@ class OrderController extends Controller
         );
     }
 
+    /**
+     * @param Request $request
+     * @return Response|Application|ResponseFactory
+     */
     public function store(Request $request): Response|Application|ResponseFactory
     {
         $validator = Validator::make($request->all(), [

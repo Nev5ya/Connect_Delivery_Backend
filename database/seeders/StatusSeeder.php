@@ -13,7 +13,7 @@ class StatusSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         DB::table('order_status')->insert([
             [ 'title' => 'В обработке' ],

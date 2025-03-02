@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Services\FirebaseService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use JetBrains\PhpStorm\NoReturn;
 use Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Factory;
 
 class FirebaseController extends Controller
@@ -21,10 +24,14 @@ class FirebaseController extends Controller
         $this->dbname = 'users';
     }
 
-    public function index()
+    /**
+     * @return JsonResponse
+     * @throws DatabaseException
+     */
+    public function index(): JsonResponse
     {
         $users = [];
-        for ($i = 1; $i < 100; $i++) {//6.5sec for 100
+        for ($i = 1; $i < 100; $i++) {
             $users[$i] = [
                 'name' => 'Admin',
                 'email' => 'admin@admin.com',
@@ -36,13 +43,18 @@ class FirebaseController extends Controller
                 'created_at' => date(now()),
             ];
         }
-        dd($this->database->getReference($this->dbname)
-            ->set($users));
+
+        $this->database->getReference($this->dbname)
+            ->set($users);
 
         return response()->json($this->database->getReference('test/blogs')->getValue());
     }
 
-    public function create()
+    /**
+     * @return JsonResponse
+     * @throws DatabaseException
+     */
+    public function create(): JsonResponse
     {
         $request = ['title' => '123123', 'content' => '421'];
         $this->database
@@ -55,16 +67,26 @@ class FirebaseController extends Controller
         return response()->json('blog has been created');
     }
 
+    /**
+     * @param array $data
+     * @return bool
+     * @throws DatabaseException
+     */
     public function firebaseInsert(array $data): bool
     {
-        if (empty($data) || !isset($data)) { return FALSE; }
+        if (empty($data)) return FALSE;
         foreach ($data as $key => $value){
             $this->database->getReference()->getChild($this->dbname)->getChild($key)->set($value);
         }
         return TRUE;
     }
 
-    public function delete(Request $request)
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws DatabaseException
+     */
+    public function delete(Request $request): JsonResponse
     {
         $request = ['title' => '123123', 'content' => '421'];
         $this->database
