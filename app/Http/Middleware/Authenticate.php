@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
 
@@ -14,14 +15,21 @@ class Authenticate extends Middleware
      * @param  Request  $request
      * @return string|null
      */
-    protected function redirectTo($request)
+    protected function redirectTo($request): ?string
     {
         if (! $request->expectsJson()) {
             return route('login');
         }
     }
 
-    public function handle($request, Closure $next, ...$guards)
+    /**
+     * @param $request
+     * @param Closure $next
+     * @param ...$guards
+     * @return mixed
+     * @throws AuthenticationException
+     */
+    public function handle($request, Closure $next, ...$guards): mixed
     {
         if ($jwt = $request->only('auth-token')) {
             $request->headers->set('Authorization', 'Bearer ' . $jwt['auth-token']);

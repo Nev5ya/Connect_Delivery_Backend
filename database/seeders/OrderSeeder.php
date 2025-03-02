@@ -13,7 +13,7 @@ class OrderSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $factory = Factory::create('ru_RU');
         $address = $factory->city . ', ' . $factory->streetAddress;

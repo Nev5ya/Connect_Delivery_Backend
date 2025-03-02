@@ -42,16 +42,8 @@ class ProfileController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
+     * @return string[]
      */
-    public function destroy($id)
-    {
-        //
-    }
-
     #[ArrayShape([
         'password' => "string",
         'password_confirmation' => "string"
@@ -64,6 +56,10 @@ class ProfileController extends Controller
         ];
     }
 
+    /**
+     * @param User $user
+     * @return string[]
+     */
     #[ArrayShape(['email' => "string"])]
     public function profileRules(User $user): array
     {

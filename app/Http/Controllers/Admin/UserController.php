@@ -17,11 +17,6 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class UserController extends Controller
 {
-//    public function __construct()
-//    {
-//        $this->authorizeResource(User::class, 'user');
-//    }
-
     /**
      * @param User $user
      * @return UserResource
@@ -39,7 +34,6 @@ class UserController extends Controller
      */
     public function show(User $user): UserResource
     {
-//        $firebaseService->getUserByEmail($user->getEmailForVerification());
         return UserResource::make(
             $user->find($user->getAttribute('id'))
         );
@@ -109,6 +103,11 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param UserService $userService
+     * @return Response|Application|ResponseFactory
+     */
     public function uploadPhoto(Request $request, UserService $userService): Response|Application|ResponseFactory
     {
         $message = $userService->handleProfilePhoto($request);
@@ -122,6 +121,11 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @param User $user
+     * @param UserService $userService
+     * @return Response|Application|ResponseFactory
+     */
     public function destroyPhoto(User $user, UserService $userService): Response|Application|ResponseFactory
     {
         $userService->setDefaultUserPhoto($user);

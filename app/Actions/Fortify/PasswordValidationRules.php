@@ -3,7 +3,6 @@
 namespace App\Actions\Fortify;
 
 use JetBrains\PhpStorm\Pure;
-use Laravel\Fortify\Rules\Password;
 
 trait PasswordValidationRules
 {
@@ -16,6 +15,5 @@ trait PasswordValidationRules
     protected function passwordRules(): array
     {
         return ['required', 'string', 'confirmed'];
-//        return ['required', 'string', new Password, 'confirmed'];
     }
 }

@@ -35,6 +35,10 @@ class Order extends Model
             ->get();
     }
 
+    /**
+     * @param $id
+     * @return Model|Collection|Builder|array|null
+     */
     public function find($id): Model|Collection|Builder|array|null
     {
         return Order::query()->select(
@@ -47,6 +51,9 @@ class Order extends Model
             ->find($id);
     }
 
+    /**
+     * @return HasMany
+     */
     public function user(): HasMany
     {
         return $this->hasMany(User::class);

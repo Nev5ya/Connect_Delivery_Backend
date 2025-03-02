@@ -9,6 +9,11 @@ class UserService
 {
     private string $defaultProfilePhotoPath = '/storage/images/profilePhotos/default-avatar.png';
 
+    /**
+     * @param User $user
+     * @param array $state
+     * @return bool
+     */
     public function changeUserState(User $user, array $state): bool
     {
         if ($this->hasUserHaveIncompleteOrders($user)) {
@@ -20,11 +25,19 @@ class UserService
         return false;
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function hasUserHaveIncompleteOrders(User $user): bool
     {
        return $user->order()->get()->where('order_status_id', '<>', 3)->isEmpty();
     }
 
+    /**
+     * @param Request $request
+     * @return array|array[]
+     */
     public function handleProfilePhoto(Request $request): array
     {
         if ( empty($request->files->all()) || !$request->files->has('profilePhoto') ) {
@@ -54,6 +67,10 @@ class UserService
         ];
     }
 
+    /**
+     * @param $path
+     * @return void
+     */
     protected function setNewUserPhoto($path): void
     {
         User::query()
@@ -62,7 +79,11 @@ class UserService
             ->save();
     }
 
-    public function setDefaultUserPhoto(User $user)
+    /**
+     * @param User $user
+     * @return mixed
+     */
+    public function setDefaultUserPhoto(User $user): mixed
     {
         $user = $user->find(auth()->user()->getAuthIdentifier());
         return $user
@@ -70,6 +91,10 @@ class UserService
             ->save();
     }
 
+    /**
+     * @param User $target
+     * @return bool
+     */
     public function checkPermissions(User $target): bool
     {
         $current = auth()->user();

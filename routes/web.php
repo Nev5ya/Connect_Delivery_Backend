@@ -20,7 +20,3 @@ Route::get('/', function () {
 });
 
 Route::view('/{path?}', 'welcome');
-
-//Route::get('/login', function () {
-//    Auth::loginUsingId(1);
-//});

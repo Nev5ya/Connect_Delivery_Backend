@@ -13,7 +13,7 @@ class UserStatusSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         DB::table('user_status')->insert([
             [ 'title' => 'Offline' ],

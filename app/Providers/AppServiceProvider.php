@@ -9,21 +9,12 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
-
-    /**
      * Bootstrap any application services.
      *
+     * @param UrlGenerator $url
      * @return void
      */
-    public function boot(UrlGenerator $url)
+    public function boot(UrlGenerator $url): void
     {
         if (App::environment('production')) {
             $url->forceScheme('https');
